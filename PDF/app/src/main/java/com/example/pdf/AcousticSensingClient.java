@@ -10,15 +10,18 @@ import org.java_websocket.handshake.ServerHandshake;
 
 
 public class AcousticSensingClient extends WebSocketClient{
-    static URI URL;
+    static String URL;
+    TextView STATUS = null;
 
-    public AcousticSensingClient(URI URL) throws URISyntaxException {
-        super(URL);
+    public AcousticSensingClient(String URL) throws URISyntaxException {
+        super(new URI(URL));
         this.URL = URL;
     }
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
+        STATUS.findViewById(R.id.STATUS);
+        STATUS.setText("Opened");
     }
 
     @Override
@@ -27,11 +30,12 @@ public class AcousticSensingClient extends WebSocketClient{
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
+        STATUS.findViewById(R.id.STATUS);
+        STATUS.setText("Closed");
     }
 
     @Override
     public void onError(Exception ex) {
-        TextView STATUS = null ;
         STATUS.findViewById(R.id.STATUS);
         STATUS.setText("Error: " + ex);
     }
@@ -39,5 +43,8 @@ public class AcousticSensingClient extends WebSocketClient{
     public static void createConnection() throws URISyntaxException {
         AcousticSensingClient acousticSensingClient = new AcousticSensingClient(URL); // more about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
         acousticSensingClient.connect();
+        TextView STATUS = null;
+        STATUS.findViewById(R.id.STATUS);
+        STATUS.setText("Connected. Ready to sense.");
     }
 }

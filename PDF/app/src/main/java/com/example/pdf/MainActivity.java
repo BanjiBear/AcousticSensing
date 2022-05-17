@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
 
 public class MainActivity extends AppCompatActivity {
 
-    //private static URI URL = URI.create("ws://");
+    private static String URL = "ws://";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +40,17 @@ public class MainActivity extends AppCompatActivity {
 
             // Step 2: Convert all value to string
             String IP = editIP.getText().toString();
-            String Port = editIP.getText().toString();
+            String Port = editPort.getText().toString();
 
             if(IP.length()!=0 && Port.length()!=0 && RadioGroupMic.getCheckedRadioButtonId() != -1 && RadioGroupSpeaker.getCheckedRadioButtonId() != -1){
                 showStatus("Connecting...");
-                /*URL = parseURL(IP, Port);
+                URL = parseURL(IP, Port);
                 try {
                     AcousticSensingClient acousticSensingClient = new AcousticSensingClient(URL);
                     acousticSensingClient.createConnection();
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
-                */
             }
             if (IP.length()==0){
                 showStatus("Missing Server IP");
@@ -71,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-    /*
-        private URI parseURL(String ip, String port){
-            return URI.create(URL + ip + ":" + port);
-        }
-    */
+
+    private String parseURL(String ip, String port){
+        return URL + ip + ":" + port;
+    }
+
     public void showStatus(String status){
         TextView STATUS = (TextView) findViewById(R.id.STATUS);
         STATUS.setText(status);
