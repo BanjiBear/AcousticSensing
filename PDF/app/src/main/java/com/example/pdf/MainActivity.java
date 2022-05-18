@@ -2,7 +2,9 @@ package com.example.pdf;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,12 +12,16 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public class MainActivity extends AppCompatActivity {
 
     private static String URL = "ws://";
+    private WebSocketClient acousticSensingClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +51,19 @@ public class MainActivity extends AppCompatActivity {
             if(IP.length()!=0 && Port.length()!=0 && RadioGroupMic.getCheckedRadioButtonId() != -1 && RadioGroupSpeaker.getCheckedRadioButtonId() != -1){
                 showStatus("Connecting...");
                 URL = parseURL(IP, Port);
+                createConnection();
+                /*
+                    Reference: https://github.com/gusavila92/java-android-websocket-client
+                    Reference: https://stackoverflow.com/questions/34131718/what-is-a-simple-way-to-implement-a-websocket-client-in-android-is-the-followin
+                */
+                /*
                 try {
                     AcousticSensingClient acousticSensingClient = new AcousticSensingClient(URL);
                     acousticSensingClient.createConnection();
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
+                */
             }
             if (IP.length()==0){
                 showStatus("Missing Server IP");
@@ -78,5 +91,39 @@ public class MainActivity extends AppCompatActivity {
     public void showStatus(String status){
         TextView STATUS = (TextView) findViewById(R.id.STATUS);
         STATUS.setText(status);
+    }
+
+    public void createConnection(){
+        URI uri;
+        try {
+            uri = new URI(URL);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        }
+        acousticSensingClient = new WebSocketClient(uri) {
+            @Override
+            public void onOpen(ServerHandshake serverHandshake) {
+                Log.i("WebSocket", "Opened");
+            }
+
+            @Override
+            public void onMessage(String s) {
+            }
+
+            @Override
+            public void onClose(int i, String s, boolean b) {
+                Log.i("WebSocket", "Closed " + s);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.i("WebSocket", "Error " + e.getMessage());
+            }
+        };
+        acousticSensingClient.connect();
+
+        TextView STATUS = (TextView) findViewById(R.id.STATUS);
+        STATUS.setText("Connected. Ready to sense.");
     }
 }
