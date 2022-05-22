@@ -8,3 +8,6 @@ For the Web Socket on Android, as mentioned, the Java-WebSocket is a java implem
 Another lightweight web socket targeting Android application is proposed [here](https://github.com/gusavila92/java-android-websocket-client).  
   
 The current implementation is for remote mode. To be more specific, it requires a seperate server for the aforementioned functions. One of the goal is to implement stand-alone mode in the future.  
+  
+# Reference
+[1] H. Cheng and W. Lou, "Push the Limit of Device-Free Acoustic Sensing on Commercial Mobile Devices," IEEE INFOCOM 2021 - IEEE Conference on Computer Communications, 2021, pp. 1-10, doi: 10.1109/INFOCOM42981.2021.9488703.
